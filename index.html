@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lemon Feedback</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  * {margin:0; padding:0; box-sizing:border-box;}
+  
+  body {
+    font-family:'Poppins',sans-serif; 
+    background:linear-gradient(135deg, #fef9e7 0%, #fff9c4 100%);
+    color:#333; 
+    display:flex; 
+    flex-direction:column; 
+    align-items:center; 
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  
+  header {
+    padding:60px 20px 40px;
+    text-align:center;
+    animation:slideDown 0.8s ease-out;
+  }
+  
+  header h1 {
+    color:#f4c542; 
+    font-size:3.5rem; 
+    margin-bottom:15px;
+    font-weight:700;
+    text-shadow:2px 2px 4px rgba(0,0,0,0.1);
+    letter-spacing:-1px;
+  }
+  
+  header h1::before {
+    content:'🍋 ';
+    display:inline;
+  }
+  
+  header p {
+    font-size:1.2rem; 
+    color:#666;
+    font-weight:300;
+    letter-spacing:0.5px;
+  }
+  
+  main {
+    background:#fff; 
+    padding:50px 40px; 
+    border-radius:25px; 
+    box-shadow:0 20px 60px rgba(0,0,0,0.15);
+    width:90%; 
+    max-width:550px; 
+    margin-bottom:50px;
+    animation:fadeInUp 0.8s ease-out 0.2s both;
+  }
+  
+  form {display:flex; flex-direction:column; gap:25px;}
+  
+  input, textarea {
+    padding:18px 20px; 
+    border-radius:15px; 
+    border:2px solid #f0f0f0;
+    font-size:1rem; 
+    width:100%;
+    font-family:'Poppins',sans-serif;
+    transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background:#fafafa;
+  }
+  
+  input:focus, textarea:focus {
+    outline:none;
+    border-color:#f4c542;
+    background:#fff;
+    box-shadow:0 0 0 4px rgba(244, 197, 66, 0.1);
+    transform:translateY(-2px);
+  }
+  
+  textarea {
+    resize:none;
+    min-height:120px;
+    font-family:'Poppins',sans-serif;
+  }
+  
+  .star-label {
+    text-align:center;
+    font-size:0.95rem;
+    color:#999;
+    font-weight:500;
+    margin-bottom:8px;
+  }
+  
+  .stars {
+    display:flex; 
+    justify-content:center;
+    gap:15px;
+    max-width:300px; 
+    margin:0 auto;
+  }
+  
+  .star {
+    font-size:3rem; 
+    cursor:pointer; 
+    color:#e0e0e0;
+    transition:all 0.2s ease;
+    filter:drop-shadow(0 2px 4px rgba(0,0,0,0.05));
+  }
+  
+  .star:hover {
+    color:#f4c542;
+    transform:scale(1.15) rotate(15deg);
+  }
+  
+  .star.selected {
+    color:#f4c542;
+    transform:scale(1.1);
+  }
+  
+  button {
+    padding:18px 30px; 
+    background:linear-gradient(135deg, #f4c542 0%, #f0a931 100%);
+    border:none; 
+    border-radius:15px; 
+    font-size:1.1rem; 
+    cursor:pointer; 
+    transition:all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight:600;
+    color:#fff;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    box-shadow:0 8px 20px rgba(244, 197, 66, 0.3);
+    position:relative;
+    overflow:hidden;
+  }
+  
+  button:before {
+    content:'';
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:0;
+    height:0;
+    background:rgba(255,255,255,0.3);
+    border-radius:50%;
+    transform:translate(-50%, -50%);
+    transition:width 0.6s, height 0.6s;
+  }
+  
+  button:hover:before {
+    width:300px;
+    height:300px;
+  }
+  
+  button:hover {
+    background:linear-gradient(135deg, #f0a931 0%, #e8932a 100%);
+    transform:translateY(-3px);
+    box-shadow:0 12px 30px rgba(244, 197, 66, 0.4);
+  }
+  
+  button:active {
+    transform:translateY(-1px);
+  }
+  
+  .message {
+    text-align:center; 
+    margin-top:30px; 
+    font-size:1.1rem; 
+    line-height:1.7;
+    animation:fadeIn 0.6s ease-out;
+    padding:20px;
+    background:#f9f9f9;
+    border-radius:12px;
+    border-left:4px solid #f4c542;
+  }
+  
+  a.google-link {
+    color:#0f9d58; 
+    text-decoration:none; 
+    font-weight:600;
+    transition:all 0.3s;
+    position:relative;
+  }
+  
+  a.google-link:hover {
+    color:#0d7e47;
+    text-decoration:underline;
+  }
+  
+  a.google-link::after {
+    content:'';
+    position:absolute;
+    bottom:-2px;
+    left:0;
+    width:0;
+    height:2px;
+    background:#0f9d58;
+    transition:width 0.3s;
+  }
+  
+  @keyframes slideDown {
+    from {
+      opacity:0;
+      transform:translateY(-30px);
+    }
+    to {
+      opacity:1;
+      transform:translateY(0);
+    }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity:0;
+      transform:translateY(40px);
+    }
+    to {
+      opacity:1;
+      transform:translateY(0);
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity:0;
+      transform:scale(0.95);
+    }
+    to {
+      opacity:1;
+      transform:scale(1);
+    }
+  }
+  
+  @media(max-width:480px){
+    header h1{font-size:2.5rem;}
+    header p{font-size:1rem;}
+    main{padding:35px 25px;}
+    .stars{gap:10px;}
+    .star{font-size:2.2rem;}
+    button{padding:16px 25px; font-size:1rem;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Lemon</h1>
+  <p>Gracias por tu visita. Cuéntanos cómo fue tu experiencia.</p>
+</header>
+
+<main>
+  <form id="feedbackForm" method="POST">
+    <input type="text" name="nombre" placeholder="¿Cuál es tu nombre?" required>
+    <input type="text" name="apellido" placeholder="¿Cuál es tu apellido?" required>
+
+    <div>
+      <div class="star-label">¿Cómo fue tu experiencia?</div>
+      <div class="stars" id="starRating">
+        <span class="star" data-value="1">&#9733;</span>
+        <span class="star" data-value="2">&#9733;</span>
+        <span class="star" data-value="3">&#9733;</span>
+        <span class="star" data-value="4">&#9733;</span>
+        <span class="star" data-value="5">&#9733;</span>
+      </div>
+    </div>
+
+    <textarea name="comentario" placeholder="✍️ Cuéntanos tu experiencia (opcional)"></textarea>
+    <input type="hidden" name="rating" id="ratingHidden">
+
+    <button type="submit">✨ Enviar valoración</button>
+  </form>
+
+  <div class="message" id="message"></div>
+</main>
+
+<script>
+const stars = document.querySelectorAll('.star');
+let rating = 0;
+const ratingHidden = document.getElementById('ratingHidden');
+const form = document.getElementById('feedbackForm');
+const messageDiv = document.getElementById('messuhcichilllleriagomeszpoamplonaage');
+
+// Efecto hover en las estrellas
+stars.forEach((star, index) => {
+  star.addEventListener('mouseenter', () => {
+    stars.forEach((s, i) => {
+      if(i <= index) {
+        s.style.transform = 'scale(1.15) rotate(15deg)';
+      } else {
+        s.style.transform = 'scale(1)';
+      }
+    });
+  });
+  
+  star.addEventListener('mouseleave', () => {
+    stars.forEach(s => {
+      if(!s.classList.contains('selected')) {
+        s.style.transform = 'scale(1)';
+      }
+    });
+  });
+  
+  star.addEventListener('click', () => {
+    rating = star.getAttribute('data-value');
+    ratingHidden.value = rating;
+    stars.forEach(s => s.classList.remove('selected'));
+    star.classList.add('selected');
+    let prev = star.previousElementSibling;
+    while(prev){
+      prev.classList.add('selected');
+      prev = prev.previousElementSibling;
+    }
+  });
+});
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  
+  if(rating === 0) {
+    alert('Por favor, selecciona una valoración');
+    return;
+  }
+  
+  const formData = new FormData(form);
+  const nombre = formData.get('nombre');
+  
+  if(rating <= 3) {
+    // Enviar al email si es valoración baja (1-3 estrellas)
+    form.action = `https://formsubmit.co/${emailDestino}`;
+    
+    // Agregar campo de éxito URL
+    const successUrl = document.createElement('input');
+    successUrl.type = 'hidden';
+    successUrl.name = '_next';
+    successUrl.value = window.location.href;
+    form.appendChild(successUrl);
+    
+    // Mostrar mensaje y luego enviar
+    messageDiv.innerText = '📤 Enviando tu feedback...';
+    setTimeout(() => {
+      form.submit();
+    }, 500);
+  } else {
+    // Redirigir a la web de la cuchillería si es valoración alta (4-5 estrellas)
+    messageDiv.innerHTML = `🎉 ¡Gracias ${nombre}! Tu opinión es valiosa.<br><br>Te estamos redirigiendo a Cuchillería Gómez para que dejes tu reseña...`;
+    
+    // Enviar datos al email también (en background)
+    fetch(`https://formsubmit.co/${emailDestino}`, {
+      method: 'POST',
+      body: formData
+    }).catch(() => {});
+    
+    // Redirigir después de 2 segundos
+    setTimeout(() => {
+      window.location.href = urlCuchilleria;
+    }, 2000);
+  }
+  
+  // Resetear el formulario
+  setTimeout(() => {
+    form.reset();
+    rating = 0;
+    ratingHidden.value = '';
+    stars.forEach(s => s.classList.remove('selected'));
+    stars.forEach(s => s.style.transform = 'scale(1)');
+  }, 1000);
+});
+</script>
+
+</body>
+</html>
